@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Survey of Spatial Memory Representations for Efficient Robot Navigation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans', 'Helvetica Neue', Arial, sans-serif; color: #333; line-height: 1.7; }
+    a { color: #8A1538; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .hero {
+      background: linear-gradient(135deg, #8A1538 0%, #1E1E2E 100%);
+      color: white; text-align: center; padding: 60px 20px 40px;
+    }
+    .hero .venue {
+      display: inline-block; background: #D4A843; color: #1E1E2E;
+      padding: 4px 16px; border-radius: 20px; font-size: 14px;
+      font-weight: 700; margin-bottom: 16px; letter-spacing: 0.5px;
+    }
+    .hero h1 { font-size: 2.4em; max-width: 800px; margin: 0 auto 16px; line-height: 1.2; }
+    .hero .authors { font-size: 1.05em; margin-bottom: 8px; }
+    .hero .authors sup { font-size: 0.7em; }
+    .hero .affiliations { font-size: 0.9em; color: #D4A843; margin-bottom: 24px; }
+    .hero .links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .hero .links a {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15); color: white;
+      padding: 10px 20px; border-radius: 8px; font-weight: 600;
+      font-size: 0.95em; transition: background 0.2s;
+    }
+    .hero .links a:hover { background: rgba(255,255,255,0.3); text-decoration: none; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    section { padding: 48px 0; }
+    section:nth-child(even) { background: #f9f7f5; }
+    section h2 {
+      font-size: 1.8em; color: #8A1538; margin-bottom: 20px;
+      padding-bottom: 8px; border-bottom: 3px solid #D4A843;
+    }
+    section h3 { font-size: 1.3em; color: #8A1538; margin: 24px 0 12px; }
+    section p { margin-bottom: 16px; font-size: 1.05em; }
+
+    .key-finding {
+      background: #8A1538; color: white; text-align: center;
+      padding: 32px 20px; font-size: 1.1em; line-height: 1.8;
+    }
+    .key-finding strong { color: #D4A843; }
+
+    .stats {
+      display: flex; justify-content: center; gap: 32px;
+      flex-wrap: wrap; padding: 32px 0; text-align: center;
+    }
+    .stat { min-width: 120px; }
+    .stat .num { font-size: 2.2em; font-weight: 800; color: #8A1538; }
+    .stat .label { font-size: 0.85em; color: #666; }
+
+    .figure { margin: 24px 0; text-align: center; }
+    .figure img {
+      max-width: 100%; border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .figure .caption {
+      font-size: 0.9em; color: #666; margin-top: 8px;
+      font-style: italic; max-width: 700px; margin-left: auto; margin-right: auto;
+    }
+
+    table {
+      width: 100%; border-collapse: collapse; margin: 16px 0;
+      font-size: 0.92em;
+    }
+    th { background: #8A1538; color: white; padding: 10px 12px; text-align: left; }
+    td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+    tr:hover { background: #f5f3f0; }
+    .alpha-green { color: #228B22; font-weight: 700; }
+    .alpha-orange { color: #D4A843; font-weight: 700; }
+    .alpha-red { color: #CC2222; font-weight: 700; }
+
+    .formula-box {
+      background: #f5f3f0; border: 2px solid #8A1538;
+      border-radius: 12px; padding: 24px; text-align: center;
+      margin: 24px auto; max-width: 400px; font-size: 1.4em;
+    }
+
+    .note {
+      font-size: 0.85em; color: #666; margin-top: 12px; line-height: 1.6;
+    }
+    .note sup { font-size: 0.75em; }
+
+    .algo-box {
+      background: #f5f3f0; border: 1px solid #ccc; border-radius: 8px;
+      padding: 24px; margin: 20px 0; font-family: 'Courier New', monospace;
+      font-size: 0.92em; line-height: 1.8;
+    }
+    .algo-box .algo-title {
+      font-family: 'Noto Sans', sans-serif; font-weight: 700;
+      color: #8A1538; margin-bottom: 12px; font-size: 1.1em;
+    }
+    .algo-keyword { color: #8A1538; font-weight: 700; }
+    .algo-comment { color: #888; font-style: italic; }
+
+    .callout {
+      background: #CC2222; color: white; border-radius: 8px;
+      padding: 16px 24px; margin: 20px 0; text-align: center;
+    }
+    .callout strong { color: #FFD700; }
+
+    .citation-box {
+      background: #1E1E2E; color: #e0e0e0; padding: 20px;
+      border-radius: 8px; font-family: 'Courier New', monospace;
+      font-size: 0.85em; overflow-x: auto; white-space: pre-wrap; line-height: 1.5;
+    }
+
+    footer {
+      text-align: center; padding: 32px 20px;
+      color: #999; font-size: 0.85em; border-top: 1px solid #eee;
+    }
+    footer a { color: #8A1538; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.6em; }
+      .stats { gap: 16px; }
+      .stat .num { font-size: 1.6em; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]}};</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="venue">CVPR 2026 &mdash; WiCV Workshop</div>
+  <h1>A Survey of Spatial Memory Representations for Efficient Robot Navigation</h1>
+  <div class="authors">
+    Ma. Madecheen S. Pangaliman<sup>1,2</sup> &nbsp;
+    Steven S. Sison<sup>1</sup> &nbsp;
+    Erwin P. Quilloy<sup>1</sup> &nbsp;
+    Rowel Atienza<sup>1</sup>
+  </div>
+  <div class="affiliations">
+    <sup>1</sup>University of the Philippines Diliman &nbsp;&bull;&nbsp;
+    <sup>2</sup>University of Santo Tomas
+  </div>
+  <div class="links">
+    <a href="https://openreview.net/forum?id=7suV3CnqSj">&#128196; Paper</a>
+    <a href="http://arxiv.org/abs/2604.16482">&#128218; arXiv</a>
+    <a href="https://github.com/SuperMadee/spatial-memory-survey">&#128187; Code</a>
+    <a href="#">&#128202; Poster</a>
+  </div>
+</div>
+
+<!-- Key Finding Banner -->
+<div class="key-finding">
+  <strong>Map size alone is an unreliable proxy for deployment cost.</strong><br>
+  A system that saves an 8 MB map may still consume 1.3 GB of GPU memory at runtime.<br>
+  We introduce the <strong>overhead factor &alpha;</strong> to capture this gap,<br>
+  revealing that deployment cost varies by <strong>100&times;</strong> within neural SLAM methods alone.
+</div>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat"><div class="num">88</div><div class="label">References</div></div>
+  <div class="stat"><div class="num">52</div><div class="label">Systems</div></div>
+  <div class="stat"><div class="num">5</div><div class="label">Independently Profiled</div></div>
+  <div class="stat"><div class="num">1989&ndash;2025</div><div class="label">Coverage</div></div>
+</div>
+
+<!-- Abstract -->
+<section>
+  <div class="container">
+    <h2>Abstract</h2>
+    <p>
+      As vision-based robots navigate larger environments, their spatial memory grows without bound,
+      eventually exhausting computational resources, particularly on embedded platforms (8&ndash;16 GB
+      shared memory, &lt;30 W) where adding hardware is not an option. This survey examines the spatial
+      memory efficiency problem across 88 references spanning 52 systems (1989&ndash;2025), from occupancy
+      grids to neural implicit representations.
+    </p>
+    <p>
+      We introduce the <em>overhead factor</em> &alpha; = M<sub>peak</sub> / M<sub>map</sub>, the ratio
+      of peak runtime memory to saved map size, exposing the gap between published map sizes and actual
+      deployment cost. Independent profiling on an NVIDIA A100 GPU reveals that &alpha; spans two orders
+      of magnitude within neural methods alone, ranging from 2.3 (Point-SLAM) to 215 (NICE-SLAM, whose
+      47 MB map requires 10 GB at runtime), showing that memory architecture, not paradigm label,
+      determines deployment feasibility.
+    </p>
+  </div>
+</section>
+
+<!-- Evolution -->
+<section>
+  <div class="container">
+    <h2>30+ Years of Spatial Memory Evolution</h2>
+    <div class="figure">
+      <img src="static/images/figure1.png" alt="Evolution of spatial memory representations">
+      <div class="caption">
+        Evolution of spatial memory representations along two competing demands: geometric completeness
+        and memory efficiency. Sparse features (1) traded completeness for efficiency; neural methods (2)
+        recovered completeness via learned compression; scene graphs (3) added semantic abstraction.
+        The scene graph's vertical position reflects semantic completeness (objects, rooms, places)
+        rather than geometric fidelity. 52 systems surveyed (1989&ndash;2025).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Memory Bottleneck -->
+<section>
+  <div class="container">
+    <h2>The Memory Bottleneck</h2>
+    <p>
+      Embedded platforms cannot be upgraded after deployment. How much of the memory budget does
+      each SLAM system actually consume at runtime?
+    </p>
+    <div class="figure">
+      <img src="static/images/memory_bottleneck.png" alt="Jetson Orin NX memory budget comparison">
+      <div class="caption">
+        Runtime memory consumption on a 16 GB Jetson Orin NX budget. SplaTAM consumes 87%,
+        leaving less than 2 GB for perception, planning, and the OS.
+        Co-SLAM's 8 MB map looks safe, until runtime reveals 1.3 GB actual cost.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Overhead Factor -->
+<section>
+  <div class="container">
+    <h2>The Overhead Factor &alpha;</h2>
+    <p>
+      Published map sizes are misleading proxies for deployment cost. To capture the gap between
+      what is saved to disk and what is consumed at runtime, we define:
+    </p>
+    <div class="formula-box">
+      $$\alpha = \frac{M_{\text{peak}}}{M_{\text{map}}}$$
+    </div>
+    <p>
+      where <strong>M<sub>peak</sub></strong> is the peak runtime memory (CPU RSS or GPU allocation) and
+      <strong>M<sub>map</sub></strong> is the persistent checkpoint size on disk.
+      We distinguish <strong>&alpha;<sub>CPU</sub></strong> (CPU RSS, used for sparse systems) from
+      <strong>&alpha;<sub>GPU</sub></strong> (GPU device allocation, used for neural systems).
+    </p>
+
+    <div class="callout">
+      <strong>Example: Co-SLAM</strong> &mdash;
+      8 MB map on disk $\rightarrow$ 1.3 GB GPU at runtime &mdash;
+      $\alpha_{\text{GPU}} = \frac{1{,}258}{8} = \mathbf{157}$
+    </div>
+
+    <div class="figure">
+      <img src="static/images/alpha_comparison.png" alt="Alpha comparison across 7 SLAM systems">
+      <div class="caption">
+        Overhead factor &alpha; across 7 profiled systems. Green: &alpha; &lt; 10 (safe for deployment).
+        Orange: moderate overhead. Red: &alpha; &gt; 100 (hidden runtime cost dominates).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Profiling Results -->
+<section>
+  <div class="container">
+    <h2>Unified Efficiency Analysis</h2>
+    <p>
+      The first cross-paradigm comparison of runtime versus persistent memory, spanning sparse,
+      learned-flow, neural, and dense/hierarchical systems with explicit benchmark separation.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>System</th><th>Paradigm</th><th>ATE (cm)</th><th>PSNR (dB)</th>
+          <th>Map (MB)</th><th>Peak (MB)</th><th>FPS</th><th>&alpha;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="8" style="background:#f0f0f0;font-style:italic;font-weight:600;">Sparse &mdash; EuRoC (real-world, stereo-inertial)</td></tr>
+        <tr>
+          <td>ORB-SLAM3</td><td>Sparse</td><td>3.5</td><td>&mdash;</td>
+          <td>55</td><td>220</td><td>30</td>
+          <td class="alpha-green">4.0</td>
+        </tr>
+        <tr>
+          <td>Basalt</td><td>Sparse (VI)</td><td>8.8</td><td>&mdash;</td>
+          <td>35</td><td>120</td><td>30</td>
+          <td class="alpha-green">~3.4</td>
+        </tr>
+        <tr>
+          <td>VINS-Mono</td><td>Sparse (VI)</td><td>10.6</td><td>&mdash;</td>
+          <td>40</td><td>&mdash;</td><td>20</td><td>&mdash;</td>
+        </tr>
+        <tr><td colspan="8" style="background:#f0f0f0;font-style:italic;font-weight:600;">Learned Flow &mdash; EuRoC / TUM RGB-D (real-world)</td></tr>
+        <tr>
+          <td>DROID-SLAM</td><td>Learned Flow</td><td>~2.0</td><td>&mdash;</td>
+          <td>&mdash;</td><td>11,000</td><td>6</td><td>&mdash;</td>
+        </tr>
+        <tr><td colspan="8" style="background:#f0f0f0;font-style:italic;font-weight:600;">Neural &mdash; Replica (synthetic, RGB-D)</td></tr>
+        <tr>
+          <td>iMAP</td><td>NeRF</td><td>3.12</td><td>22.1</td>
+          <td>1</td><td>&mdash;</td><td>3</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>NICE-SLAM</td><td>NeRF</td><td>1.06</td><td>24.4</td>
+          <td>47</td><td>10,082</td><td>2</td>
+          <td class="alpha-red">215</td>
+        </tr>
+        <tr>
+          <td>Co-SLAM</td><td>NeRF</td><td>1.00</td><td>30.2</td>
+          <td>8</td><td>1,258</td><td>16</td>
+          <td class="alpha-red">157</td>
+        </tr>
+        <tr>
+          <td>Point-SLAM</td><td>NeRF</td><td>0.52</td><td>35.2</td>
+          <td>2,865</td><td>6,563</td><td>1</td>
+          <td class="alpha-green">2.3</td>
+        </tr>
+        <tr>
+          <td>SplaTAM</td><td>3DGS</td><td>0.36</td><td>34.1</td>
+          <td>254</td><td>14,024</td><td>&mdash;</td>
+          <td class="alpha-orange">55</td>
+        </tr>
+        <tr>
+          <td>MonoGS</td><td>3DGS</td><td>0.58</td><td>38.9</td>
+          <td>90</td><td>&mdash;</td><td>3</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>GS-SLAM</td><td>3DGS</td><td>0.50</td><td>34.3</td>
+          <td>198</td><td>&mdash;</td><td>8</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>SGS-SLAM</td><td>3DGS (Sem.)</td><td>0.41</td><td>34.7</td>
+          <td>254</td><td>40,330</td><td>2</td>
+          <td class="alpha-red">159</td>
+        </tr>
+        <tr><td colspan="8" style="background:#f0f0f0;font-style:italic;font-weight:600;">Scale Reference &mdash; custom outdoor sequences</td></tr>
+        <tr>
+          <td>GigaSLAM</td><td>3DGS (Hier.)</td><td>&mdash;</td><td>~24</td>
+          <td>&mdash;</td><td>&mdash;</td><td>3</td><td>&mdash;</td>
+        </tr>
+        <tr><td colspan="8" style="background:#f0f0f0;font-style:italic;font-weight:600;">Dense / Hierarchical &mdash; hardware-dependent</td></tr>
+        <tr>
+          <td>OctoMap</td><td>Dense (Octree)</td><td>&mdash;</td><td>&mdash;</td>
+          <td>45</td><td>&mdash;</td><td>10</td><td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Hydra</td><td>Scene Graph</td><td>&mdash;</td><td>&mdash;</td>
+          <td>48</td><td>&mdash;</td><td>5</td><td>&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>&alpha;<sub>CPU</sub></strong> (CPU RSS) used for sparse systems (Intel i7-10700).
+      <strong>&alpha;<sub>GPU</sub></strong> (GPU allocation) used for neural systems (NVIDIA A100-SXM4-80GB).
+      <strong>ATE</strong> = Absolute Trajectory Error (RMSE, cm; lower is better).
+      <strong>PSNR</strong> = Peak Signal-to-Noise Ratio (dB; higher is better).
+      Sparse systems evaluated on EuRoC (real-world); neural systems on Replica (synthetic).
+      Cross-benchmark ATE values are not directly comparable.
+    </div>
+
+    <h3>Checkpoint Sizes Differed from Literature</h3>
+    <div class="figure">
+      <img src="static/images/checkpoint_discrepancy.png" alt="Checkpoint size discrepancies">
+      <div class="caption">
+        Independently measured checkpoint sizes vs. values reported in literature. 3DGS checkpoints are
+        ~3&times; larger because saved Gaussian parameters exceed typically reported counts (log scale).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Memory Growth -->
+<section>
+  <div class="container">
+    <h2>Memory Grows Differently</h2>
+    <p>
+      Runtime GPU memory on Replica/room0 reveals four distinct growth patterns that map directly
+      onto memory dynamics categories:
+    </p>
+    <ul style="font-size: 1.0em; margin-left: 20px; margin-bottom: 16px;">
+      <li style="margin-bottom: 6px;"><strong style="color:#2B6CB0;">Co-SLAM</strong> (blue): stays flat at ~1.3 GB. Pre-allocated hash table bounds memory by construction. &alpha;<sub>GPU</sub> = 157.</li>
+      <li style="margin-bottom: 6px;"><strong style="color:#CC2222;">NICE-SLAM</strong> (red): oscillates between 3&ndash;7 GB due to periodic global mapping passes. Peak reaches 10.1 GB. &alpha;<sub>GPU</sub> = 215.</li>
+      <li style="margin-bottom: 6px;"><strong style="color:#D4A843;">SplaTAM</strong> (orange): grows monotonically to ~12.7 GB as Gaussians accumulate without pruning. On a 16 GB Jetson, this system would eventually crash. &alpha;<sub>GPU</sub> = 55.</li>
+      <li style="margin-bottom: 6px;"><strong style="color:#006747;">Point-SLAM</strong> (green): stabilizes at ~5.5 GB after initialization. Map-dominant: 2.9 GB checkpoint already dominates the 6.6 GB peak. &alpha;<sub>GPU</sub> = 2.3.</li>
+    </ul>
+    <div class="figure">
+      <img src="static/images/memory_growth.png" alt="Memory growth over time for 4 neural SLAM systems">
+      <div class="caption">
+        Runtime GPU memory on Replica/room0 (1 Hz sampling, NVIDIA A100-SXM4-80GB, baseline subtracted).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pareto -->
+<section>
+  <div class="container">
+    <h2>No Single Paradigm Dominates</h2>
+    <p>
+      Pareto frontier analysis with explicit benchmark separation (EuRoC left, Replica right) shows
+      that the binding constraint differs by paradigm: runtime overhead for compact implicit methods
+      (&alpha;<sub>GPU</sub> = 157, Co-SLAM) vs. map size for dense-point methods (&alpha; = 2.3, Point-SLAM).
+    </p>
+    <div class="figure">
+      <img src="static/images/pareto_plot.png" alt="Pareto frontier: accuracy vs map size">
+      <div class="caption">
+        Accuracy vs. map size by benchmark. Left: Sparse (EuRoC, linear scale).
+        Right: Neural (Replica, log scale). Dashed = Pareto front. Lower-left is better.
+      </div>
+    </div>
+    <h3>Key Observations</h3>
+    <ul style="font-size: 1.0em; margin-left: 20px; margin-bottom: 16px;">
+      <li style="margin-bottom: 6px;"><strong>EuRoC (sparse):</strong> ORB-SLAM3 achieves the best ATE (3.5 cm) at 55 MB. Basalt trades accuracy for a smaller map (35 MB). All sparse systems sustain 30 FPS.</li>
+      <li style="margin-bottom: 6px;"><strong>Replica (neural):</strong> 3DGS systems cluster favorably (ATE &le; 0.58 cm, 90&ndash;254 MB). SplaTAM achieves the best ATE (0.36 cm) at &alpha;<sub>GPU</sub> = 55.</li>
+      <li style="margin-bottom: 6px;"><strong>Point-SLAM's true checkpoint</strong> (2.9 GB) places it far from the Pareto front, invisible under the 80 MB literature estimate.</li>
+      <li style="margin-bottom: 6px;"><strong>3DGS: best accuracy. Sparse: best efficiency. No single paradigm dominates.</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Budgeting -->
+<section>
+  <div class="container">
+    <h2>&alpha;-Aware Memory Budgeting</h2>
+    <p>
+      Given a target platform, the following algorithm computes the largest map the hardware can support.
+      The key insight: work <em>backward</em> from deployment memory constraints using &alpha;,
+      not forward from map size benchmarks.
+    </p>
+    <div class="formula-box">
+      $$M_{\text{map}}^{\max} = \frac{M_{\text{budget}}}{\alpha}$$
+    </div>
+
+    <div class="algo-box">
+      <div class="algo-title">Algorithm 1: &alpha;-Aware Memory Budgeting</div>
+      <strong class="algo-keyword">Input:</strong> M<sub>budget</sub>: available RAM/VRAM after OS and drivers<br>
+      <strong class="algo-keyword">Output:</strong> Feasible map size and representation choice<br><br>
+      1. Look up &alpha; for candidate paradigm (from profiling table)<br>
+      2. M<sub>map</sub><sup>max</sup> &larr; M<sub>budget</sub> / &alpha;
+<br>
+      3. <strong class="algo-keyword">if</strong> M<sub>map</sub><sup>max</sup> &ge; M<sub>target</sub> <strong class="algo-keyword">then</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Select representation from selection guide<br>
+      4. <strong class="algo-keyword">else</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Apply compression (10&ndash;25&times;), adopt submaps/streaming,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;or choose a sparser representation<br>
+    </div>
+
+    <h3>Representation Selection Guide</h3>
+    <table>
+      <thead>
+        <tr><th>Constraint</th><th>Recommended</th><th>&alpha; range</th><th>Type</th><th>Max Map</th><th>Avoid</th></tr>
+      </thead>
+      <tbody>
+        <tr style="background:#e8f5e9;">
+          <td>CPU-only (&lt;8 GB)</td><td>Sparse, Octree</td><td>3&ndash;5</td><td>CPU</td><td>~4 GB</td><td>Neural</td>
+        </tr>
+        <tr style="background:#e8f5e9;">
+          <td>Embedded GPU (&lt;16 GB)</td><td>Sparse, SG</td><td>4&ndash;10</td><td>CPU</td><td>~2 GB</td><td>Raw 3DGS</td>
+        </tr>
+        <tr style="background:#fff3e0;">
+          <td>Dense geometry</td><td>TSDF, 3DGS</td><td>~55</td><td>GPU</td><td>290 MB</td><td>Sparse only</td>
+        </tr>
+        <tr style="background:#ffebee;">
+          <td>Photo rendering</td><td>3DGS, NeRF</td><td>2&ndash;215</td><td>GPU</td><td>75 MB</td><td>Occupancy</td>
+        </tr>
+        <tr style="background:#f5f5f5;">
+          <td>Multi-hour</td><td>Submaps, Stream</td><td>varies</td><td>&mdash;</td><td>&mdash;</td><td>Monolithic</td>
+        </tr>
+        <tr style="background:#f5f5f5;">
+          <td>Semantic</td><td>SG, VLM</td><td>4&ndash;10</td><td>CPU</td><td>&mdash;</td><td>Geom. only</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>Type:</strong> whether &alpha; refers to CPU RSS or GPU allocation. SG = Scene Graph.<br>
+      <strong>Example:</strong> Jetson Orin NX (16 GB) with &alpha;<sub>GPU</sub> &isin; [55, 215] yields
+      M<sub>map</sub><sup>max</sup> &asymp; 75&ndash;290 MB. With sparse SLAM (&alpha;<sub>CPU</sub> &asymp; 4): ~4 GB.
+    </div>
+  </div>
+</section>
+
+<!-- Evaluation Protocol -->
+<section>
+  <div class="container">
+    <h2>Proposed Evaluation Protocol</h2>
+    <p>
+      The overhead factor &alpha; captures an important dimension, but a single ratio is insufficient.
+      We propose four complementary metrics that no surveyed system currently reports:
+    </p>
+    <ol style="font-size: 1.0em; margin-left: 20px;">
+      <li style="margin-bottom: 10px;">
+        <strong>Memory growth rate</strong> (dM/dt): Distinguishes bounded systems (RTAB-Map, hash-based NeRF)
+        from unbounded ones (vanilla 3DGS). Low final M<sub>map</sub> but high dM/dt leads to out-of-memory
+        failures on longer missions.
+      </li>
+      <li style="margin-bottom: 10px;">
+        <strong>Query latency:</strong> Varies by orders of magnitude (O(1) hash lookups to full NeRF inference)
+        yet is never benchmarked comparatively.
+      </li>
+      <li style="margin-bottom: 10px;">
+        <strong>Memory&ndash;completeness curve:</strong> F1 score vs. cumulative map size, revealing diminishing
+        returns in reconstruction quality.
+      </li>
+      <li style="margin-bottom: 10px;">
+        <strong>Throughput degradation:</strong> FPS as map size approaches the memory ceiling. Short benchmarks
+        (&lt;5 min) never stress this.
+      </li>
+    </ol>
+    <p>
+      Current benchmarks (EuRoC, Replica, TUM RGB-D) cover minutes at room-scale. Long-duration benchmarks
+      (&ge;30 min) recording M(t) and FPS(t) would be a high-impact contribution.
+    </p>
+  </div>
+</section>
+
+<!-- Open Challenges -->
+<section>
+  <div class="container">
+    <h2>Open Challenges</h2>
+
+    <h3>City-Scale Neural SLAM</h3>
+    <p>
+      GigaSLAM demonstrates kilometer-scale 3DGS, but true city-scale operation
+      (~10<sup>7</sup> m<sup>3</sup>, &gt;100 h, &lt;30 W) remains open. Even at 15&times; compression,
+      city-scale maps reach multi-gigabyte range without LOD management.
+    </p>
+
+    <h3>Lifelong Map Maintenance</h3>
+    <p>
+      Neural SLAM faces catastrophic forgetting: new observations overwrite weights encoding earlier regions.
+      Information-theoretic criteria for <em>when to forget</em> (e.g., retaining only observations that
+      reduce map entropy) are largely unexplored.
+    </p>
+
+    <h3>Uncertainty Quantification</h3>
+    <p>
+      Neural representations return confident outputs for unobserved regions, a critical failure mode
+      for safety-critical planning. Stochastic approaches multiply inference cost, and storing per-element
+      variance doubles map storage.
+    </p>
+
+    <h3>Foundation Model Features</h3>
+    <p>
+      CLIP embeddings (d=512, 32-bit) cost ~2 GB per million points, adding a memory layer on top of
+      the geometric map. Even compressed, language features add ~50% per-Gaussian overhead.
+      No surveyed paper reports &alpha; for semantic systems.
+    </p>
+
+    <h3>Hardware&ndash;Algorithm Co-Design</h3>
+    <p>
+      Unified memory architectures (NVIDIA Jetson Orin, Apple Silicon) may reduce &alpha; by eliminating
+      duplicate CPU&ndash;GPU buffers. Custom ASICs and software optimization narrow the gap but neither
+      achieves full-resolution real-time on stock embedded hardware.
+    </p>
+  </div>
+</section>
+
+<!-- Summary -->
+<section>
+  <div class="container">
+    <h2>Summary &amp; Recommendations</h2>
+    <p>
+      This survey traced spatial memory evolution across over three decades and 88 references around a
+      central finding: <strong>map size alone is an unreliable proxy for deployment cost</strong>.
+      Our overhead factor &alpha; spans two orders of magnitude (&alpha;<sub>GPU</sub> = 2.3&ndash;215),
+      revealing that compact implicit methods pay orders-of-magnitude runtime overhead, dense neural point
+      methods embed cost in the map itself, and 3DGS methods inherit high &alpha; from unbounded accumulation.
+    </p>
+    <ol style="font-size: 1.05em; margin-left: 20px;">
+      <li style="margin-bottom: 8px;">Adopt &alpha;-aware reporting: report M<sub>peak</sub> + hardware specs alongside M<sub>map</sub>.</li>
+      <li style="margin-bottom: 8px;">Develop long-duration benchmarks (&ge;30 min) that record M(t) and stress-test growth to failure.</li>
+      <li style="margin-bottom: 8px;">Establish inference-time profiling protocols separating training overhead from deployment cost.</li>
+    </ol>
+
+    <h3>Limitations</h3>
+    <p>
+      Our profiling covers five neural SLAM systems on a single Replica scene using one GPU (A100).
+      &alpha; values may differ on other scenes, datasets, or hardware. Only training-time &alpha; is
+      measured; inference-only &alpha; remains unprofiled. Benchmark heterogeneity constrains cross-paradigm
+      comparisons to &alpha; and scaling behavior.
+    </p>
+  </div>
+</section>
+
+<!-- Citation -->
+<section>
+  <div class="container">
+    <h2>Citation</h2>
+    <div class="citation-box">@inproceedings{pangaliman2026survey,
+  title     = {A Survey of Spatial Memory Representations for Efficient Robot Navigation},
+  author    = {Pangaliman, Ma. Madecheen S. and Sison, Steven S. and Quilloy, Erwin P. and Atienza, Rowel},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops},
+  year      = {2026}
+}</div>
+  </div>
+</section>
+
+<!-- Acknowledgements -->
+<section>
+  <div class="container">
+    <h2>Acknowledgements</h2>
+    <p>
+      The authors would like to thank the Engineering Research and Development for Technology (ERDT)
+      program of the Department of Science and Technology &ndash; Science Education Institute (DOST-SEI),
+      Philippines, the Office of International Linkages (OIL) of the University of the Philippines Diliman,
+      and the Research Dissemination Grant of the UP Artificial Intelligence Research Program for supporting
+      this work. We are also grateful to the Ubiquitous Computing Laboratory at UP Diliman for providing
+      computational resources.
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>
+    <a href="https://github.com/SuperMadee/spatial-memory-survey">GitHub</a> &bull;
+    CVPR 2026 WiCV Workshop
+  </p>
+  <p style="margin-top: 8px;">
+    Template adapted from <a href="https://nerfies.github.io">Nerfies</a>.
+    Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+  </p>
+</footer>
+
+</body>
+</html>
