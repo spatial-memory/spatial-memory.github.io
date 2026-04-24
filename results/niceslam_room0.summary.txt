@@ -1,0 +1,6 @@
+duration_s: 6304.8
+gpu_baseline_MB: 1
+gpu_peak_total_MB: 10083
+gpu_peak_process_MB: 10082
+cpu_peak_rss_MB: 1
+samples: 5779
