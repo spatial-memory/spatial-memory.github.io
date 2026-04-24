@@ -197,7 +197,7 @@
   <div class="container">
     <h2>30+ Years of Spatial Memory Evolution</h2>
     <div class="figure">
-      <img src="static/images/figure1.png" alt="Evolution of spatial memory representations">
+      <img src="docs/static/images/figure1.png" alt="Evolution of spatial memory representations">
       <div class="caption">
         Evolution of spatial memory representations along two competing demands: geometric completeness
         and memory efficiency. Sparse features (1) traded completeness for efficiency; neural methods (2)
@@ -218,7 +218,7 @@
       each SLAM system actually consume at runtime?
     </p>
     <div class="figure">
-      <img src="static/images/memory_bottleneck.png" alt="Jetson Orin NX memory budget comparison">
+      <img src="docs/static/images/memory_bottleneck.png" alt="Jetson Orin NX memory budget comparison">
       <div class="caption">
         Runtime memory consumption on a 16 GB Jetson Orin NX budget. SplaTAM consumes 87%,
         leaving less than 2 GB for perception, planning, and the OS.
@@ -253,7 +253,7 @@
     </div>
 
     <div class="figure">
-      <img src="static/images/alpha_comparison.png" alt="Alpha comparison across 7 SLAM systems">
+      <img src="docs/static/images/alpha_comparison.png" alt="Alpha comparison across 7 SLAM systems">
       <div class="caption">
         Overhead factor &alpha; across 7 profiled systems. Green: &alpha; &lt; 10 (safe for deployment).
         Orange: moderate overhead. Red: &alpha; &gt; 100 (hidden runtime cost dominates).
@@ -363,7 +363,7 @@
 
     <h3>Checkpoint Sizes Differed from Literature</h3>
     <div class="figure">
-      <img src="static/images/checkpoint_discrepancy.png" alt="Checkpoint size discrepancies">
+      <img src="docs/static/images/checkpoint_discrepancy.png" alt="Checkpoint size discrepancies">
       <div class="caption">
         Independently measured checkpoint sizes vs. values reported in literature. 3DGS checkpoints are
         ~3&times; larger because saved Gaussian parameters exceed typically reported counts (log scale).
@@ -387,7 +387,7 @@
       <li style="margin-bottom: 6px;"><strong style="color:#006747;">Point-SLAM</strong> (green): stabilizes at ~5.5 GB after initialization. Map-dominant: 2.9 GB checkpoint already dominates the 6.6 GB peak. &alpha;<sub>GPU</sub> = 2.3.</li>
     </ul>
     <div class="figure">
-      <img src="static/images/memory_growth.png" alt="Memory growth over time for 4 neural SLAM systems">
+      <img src="docs/static/images/memory_growth.png" alt="Memory growth over time for 4 neural SLAM systems">
       <div class="caption">
         Runtime GPU memory on Replica/room0 (1 Hz sampling, NVIDIA A100-SXM4-80GB, baseline subtracted).
       </div>
@@ -405,7 +405,7 @@
       (&alpha;<sub>GPU</sub> = 157, Co-SLAM) vs. map size for dense-point methods (&alpha; = 2.3, Point-SLAM).
     </p>
     <div class="figure">
-      <img src="static/images/pareto_plot.png" alt="Pareto frontier: accuracy vs map size">
+      <img src="docs/static/images/pareto_plot.png" alt="Pareto frontier: accuracy vs map size">
       <div class="caption">
         Accuracy vs. map size by benchmark. Left: Sparse (EuRoC, linear scale).
         Right: Neural (Replica, log scale). Dashed = Pareto front. Lower-left is better.
